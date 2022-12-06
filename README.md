@@ -9,7 +9,7 @@ These instructions will help you to work in the most effective way, please follo
 * You must clone the repo in your computer
 
 ```
-Git clone https://github.com/sact1909/cruddockercompose.git
+git clone https://github.com/oneal1801/MoviesApiChallenge.git
 ```
 
 * In your console, go to the soluction directory and run the following docker command
