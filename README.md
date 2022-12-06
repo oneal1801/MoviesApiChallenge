@@ -1,7 +1,5 @@
 # CRUD Docker Compose with SQL Server (Linux Image)
 
-This project is under construction by <a href='https://checox.com'>Steven Checo</a>
-
 ## Getting Started
 
 These instructions will help you to work in the most effective way, please follow those instruction to know how to do it
@@ -29,4 +27,4 @@ http://localhost:8080/
 
 ## Authors
 
-* **Oneal Marte Adames** - *Initial work* - [sact1909](https://github.com/oneal1801)
+* **Oneal Marte Adames** - *Initial work* - [oneal1801](https://github.com/oneal1801)
