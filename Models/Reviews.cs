@@ -9,7 +9,7 @@ namespace MoviesApiChallenge.Models
         [Key]
         public Guid Id { get; set; }
         public string description { get; set; }
-        public int MovieId { get; set; }
+        public Guid MovieId { get; set; }
         public virtual Movie Movie { get; set; }
     }
 }
