@@ -10,5 +10,5 @@ services:
     moviesdb:
         image: "mcr.microsoft.com/mssql/server"
         environment:
-            SA_PASSWORD: "admin123"
+            SA_PASSWORD: "YourPasswordHere0011"
             ACCEPT_EULA: "Y"
