@@ -1,123 +1,115 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoviesApiChallenge.Dtos;
+using MoviesApiChallenge.Interfaces;
 using MoviesApiChallenge.Models;
+using System.Net;
 
 namespace MoviesApiChallenge.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/movies")]
     [ApiController]
-    public class MoviesController : Controller
+    public class MoviesController : BaseController
     {
-        private readonly TheaterDbContext db;
-        public MoviesController(TheaterDbContext _db)
+        private readonly IMovieService movieService;
+        private const string SUCCESS = "The request was process success";
+        private const string FAILED = "The request was process success";
+        public MoviesController(IMovieService _movieService)
         {
-            db = _db;
+            movieService = _movieService;
         }
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
-        {
-            if (db.Movie == null)
+        public async Task<ActionResult<IEnumerable<ResponseDTO>>> GetAsync()
+        {            
+            var operationID = Guid.NewGuid();
+
+            try
             {
-                return NotFound();
+                var result = await movieService.GetMoviesAsync();
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                return Ok(Response);
             }
-            return await db.Movie.ToListAsync();
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDTO(operationID, false, FAILED, "", HttpStatusCode.BadRequest, ex));
+            }
+
         }
 
         // GET: api/Movies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(string id)
+        public async Task<ActionResult<ResponseDTO>> GetMovie(string id)
         {
-            if (db.Movie == null)
-            {
-                return NotFound();
-            }
-          
-            var movie = await db.Movie.FindAsync(Guid.Parse(id));
+            var operationID = Guid.NewGuid();
 
-            if (movie == null)
+            try
             {
-                return NotFound();
+                var result = await movieService.GetMovieByIdAsync(id);
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                return Ok(Response);
             }
-
-            return movie;
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDTO(operationID, false, FAILED, "", HttpStatusCode.BadRequest, ex));
+            }
         }
 
         // POST: api/Movies
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<ResponseDTO>> PostMovie([FromForm] MovieDto movie)
         {
-            db.Movie.Add(movie);
-            await db.SaveChangesAsync();
+            var operationID = Guid.NewGuid();
+            if (!ModelState.IsValid)
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, new Exception("Invalid payload, check your form")));
 
-            return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
-        }
-
-        // POST: api/Movies
-        [HttpPost]
-        public async Task<IActionResult> AddReview(Reviews reviews)
-        {
-            db.Reviews.Add(reviews);
-            await db.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMovie), new { id = reviews.MovieId }, reviews);
+            try
+            {
+                var result = await movieService.PostMovieAsync(movie);
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                return Ok(Response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, ex));
+            }
         }
 
         // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(string id, Movie movie)
+        public async Task<ActionResult<ResponseDTO>> PutMovie([FromForm] string id, UpdateMovieDto movie)
         {
-            if (Guid.Parse(id) != movie.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(movie).State = EntityState.Modified;
+            var operationID = Guid.NewGuid();
 
             try
             {
-                await db.SaveChangesAsync();
+                var result = await movieService.PutMovieAsync(id,movie);
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                return Ok(Response);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, ex));
             }
-
-            return NoContent();
         }
 
-        // DELETE: api/Movies/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(string id)
+        // UpdateStatus: api/Movies/5
+        [HttpPut("updatestatus/{id}")]
+        public async Task<ActionResult<ResponseDTO>> ChangeMovieStatusAsync(string id, int status)
         {
-            if (db.Movie == null)
+            var operationID = Guid.NewGuid();
+
+            try
             {
-                return NotFound();
+                await movieService.ChangeMovieStatusAsync(id, status);
+                var Response = new ResponseDTO(operationID, true, SUCCESS, "Status was updated", HttpStatusCode.OK, new Exception());
+                return Ok(Response);
             }
-
-            var movie = await db.Movie.FindAsync(Guid.Parse(id));
-            if (movie == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, ex));
             }
-
-            db.Movie.Remove(movie);
-            await db.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool MovieExists(string id)
-        {
-            return (db.Movie?.Any(e => e.Id == Guid.Parse(id))).GetValueOrDefault();
         }
 
     }

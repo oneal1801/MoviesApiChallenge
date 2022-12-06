@@ -8,8 +8,8 @@ namespace MoviesApiChallenge.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
-        public string description { get; set; }
+        public string? Comment { get; set; }
         public Guid MovieId { get; set; }
-        public virtual Movie Movie { get; set; }
+        public virtual Movie? Movie { get; set; }
     }
 }

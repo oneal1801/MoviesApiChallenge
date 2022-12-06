@@ -13,7 +13,10 @@ namespace MoviesApiChallenge.Models
 
         public string? Genre { get; set; }
 
+        public string? Description { get; set; }
+
         public DateTime ReleaseDate { get; set; }
+        public int status { get; set; }
 
         public virtual Reviews Reviews { get; set; }
 
