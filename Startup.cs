@@ -7,6 +7,8 @@ using Serilog.Events;
 using AutoMapper;
 using Microsoft.OpenApi.Models;
 using MoviesApiChallenge.Utilities.MapperProfilers;
+using MoviesApiChallenge.Interfaces;
+using MoviesApiChallenge.Service;
 
 namespace MoviesApiChallenge
 {
@@ -29,6 +31,9 @@ namespace MoviesApiChallenge
             services.AddDbContext<TheaterDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddSwaggerGen();
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -42,22 +47,21 @@ namespace MoviesApiChallenge
 
             services.AddCors();
             services.AddHealthChecks();
+
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IReviewService, ReviewService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(builder => builder
-             .AllowAnyOrigin()
-             .AllowAnyMethod()
-             .AllowAnyHeader());
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MoviesApiChallenge v1"));
             }
+
             app.UseSerilogRequestLogging(options =>
             {
                 // Customize the message template
@@ -78,6 +82,11 @@ namespace MoviesApiChallenge
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder
+             .AllowAnyOrigin()
+             .AllowAnyMethod()
+             .AllowAnyHeader());
 
             app.UseAuthorization();
 

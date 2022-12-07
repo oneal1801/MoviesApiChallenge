@@ -1,4 +1,4 @@
-version: "3.9"
+version: "4.10.1"
 services:
     api:
         image: moviesapichallenge
@@ -6,9 +6,11 @@ services:
         ports:
             - "8080:80"
         depends_on:
-          - db
+          - moviesdb
     moviesdb:
-        image: "mcr.microsoft.com/mssql/server"
+        image: "mcr.microsoft.com/mssql/server:2022-latest"
         environment:
-            SA_PASSWORD: "YourPasswordHere0011"
+            SA_PASSWORD: "StevenCheco@1909"
             ACCEPT_EULA: "Y"
+        ports:
+          - "1433:1433"
