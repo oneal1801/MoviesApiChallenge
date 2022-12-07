@@ -23,6 +23,7 @@ try {
                         .Enrich.With(new OperationIdEnricher())
                         .WriteTo.Console(new ExpressionTemplate("[{@t:yyyy-MM-dd HH:mm:ss.fff} {ElementAt(@p, 'RequestId') ci} {@l:u4}] {@m}\n{@x}", theme: TemplateTheme.Literate)));
     builder.WebHost.UseUrls("http://*:80");
+
     var startup = new Startup(builder.Configuration);
     startup.ConfigureServices(builder.Services);
 

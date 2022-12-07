@@ -21,7 +21,7 @@ docker-compose up --build
 * Go to the following URL in your browser to see your site running (please wait some seconds before open the URL, because docker has to setting up the webserver)
 
 ```
-http://localhost:8080/
+http://localhost:8080/swagger/index.html
 ```
 
 

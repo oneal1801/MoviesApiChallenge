@@ -117,7 +117,8 @@ namespace MoviesApiChallenge.Service
                 data.Description = movie.Description;
                 data.ReleaseDate = movie.ReleaseDate;
                 logger.Information($"Saving the new entry");
-                db.Entry(data).State = EntityState.Modified;
+                var dataToEntity = mapper.Map<Movie>(data);
+                db.Entry(dataToEntity).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 logger.Information($"The movie was updated successfully");
                 return 1;
@@ -138,7 +139,7 @@ namespace MoviesApiChallenge.Service
             var movieStatus = await db.Movie.Where(w => w.Id == Guid.Parse(Id)).FirstOrDefaultAsync();
             if (movieStatus != null)
             {
-                movieStatus.status = status;
+                movieStatus.Status = status;
                 db.Entry(movieStatus).State = EntityState.Modified;
                 logger.Information("The status of the movie was modified successfully");
                 await db.SaveChangesAsync();

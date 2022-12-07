@@ -28,12 +28,12 @@ namespace MoviesApiChallenge.Controllers
             try
             {
                 var result = await movieService.GetMoviesAsync();
-                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, "");
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseDTO(operationID, false, FAILED, "", HttpStatusCode.BadRequest, ex));
+                return BadRequest(new ResponseDTO(operationID, false, FAILED, "", HttpStatusCode.BadRequest, ex.Message));
             }
 
         }
@@ -47,12 +47,12 @@ namespace MoviesApiChallenge.Controllers
             try
             {
                 var result = await movieService.GetMovieByIdAsync(id);
-                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, "");
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseDTO(operationID, false, FAILED, "", HttpStatusCode.BadRequest, ex));
+                return BadRequest(new ResponseDTO(operationID, false, FAILED, "", HttpStatusCode.BadRequest, ex.Message));
             }
         }
 
@@ -62,35 +62,35 @@ namespace MoviesApiChallenge.Controllers
         {
             var operationID = Guid.NewGuid();
             if (!ModelState.IsValid)
-                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, new Exception("Invalid payload, check your form")));
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, "Invalid payload, check your form"));
 
             try
             {
                 var result = await movieService.PostMovieAsync(movie);
-                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, "");
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, ex));
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.BadRequest, ex.Message));
             }
         }
 
         // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseDTO>> PutMovie([FromForm] string id, UpdateMovieDto movie)
+        public async Task<ActionResult<ResponseDTO>> PutMovie(string id, UpdateMovieDto movie)
         {
             var operationID = Guid.NewGuid();
 
             try
             {
                 var result = await movieService.PutMovieAsync(id,movie);
-                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, new Exception());
+                var Response = new ResponseDTO(operationID, true, SUCCESS, result, HttpStatusCode.OK, "");
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, ex));
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.BadRequest, ex.Message));
             }
         }
 
@@ -103,12 +103,12 @@ namespace MoviesApiChallenge.Controllers
             try
             {
                 await movieService.ChangeMovieStatusAsync(id, status);
-                var Response = new ResponseDTO(operationID, true, SUCCESS, "Status was updated", HttpStatusCode.OK, new Exception());
+                var Response = new ResponseDTO(operationID, true, SUCCESS, "Status was updated", HttpStatusCode.OK, "");
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.OK, ex));
+                return BadRequest(new ResponseDTO(operationID, true, FAILED, "", HttpStatusCode.BadRequest, ex.Message));
             }
         }
 

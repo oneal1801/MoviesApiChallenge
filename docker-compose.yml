@@ -1,7 +1,7 @@
 version: "4.10.1"
 services:
     api:
-        image: moviesapichallenge
+        image: movieapichallenge.azurecr.io/moviesapichallenge
         build: .
         ports:
             - "8080:80"
@@ -10,7 +10,7 @@ services:
     moviesdb:
         image: "mcr.microsoft.com/mssql/server:2022-latest"
         environment:
-            SA_PASSWORD: "StevenCheco@1909"
+            SA_PASSWORD: "MovieChallenge@123"
             ACCEPT_EULA: "Y"
         ports:
           - "1433:1433"

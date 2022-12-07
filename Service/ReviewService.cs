@@ -22,7 +22,7 @@ namespace MoviesApiChallenge.Service
         public async Task AddReviewToMovieAsync(ReviewDto review)
         {
             //var movie = await db.Movie.Where(w => w.Id == Guid.Parse(movieId)).FirstOrDefaultAsync();
-            var reviewDtoToEntity = mapper.Map<Reviews>(review.MovieId);
+            var reviewDtoToEntity = mapper.Map<Reviews>(review);
             var result = await db.Reviews.AddAsync(reviewDtoToEntity);
             await db.SaveChangesAsync();
 
