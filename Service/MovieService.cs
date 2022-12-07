@@ -90,6 +90,7 @@ namespace MoviesApiChallenge.Service
                 throw new Exception($"The movie {movie.Title} is already on our records");
             }
 
+            movie.Status = 1;
             var movieDtoToEntity = mapper.Map<Movie>(movie);
             var result = await db.Movie.AddAsync(movieDtoToEntity);
             await db.SaveChangesAsync();

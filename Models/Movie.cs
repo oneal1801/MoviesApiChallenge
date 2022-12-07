@@ -16,7 +16,7 @@ namespace MoviesApiChallenge.Models
         public string? Description { get; set; }
 
         public DateTime ReleaseDate { get; set; }
-        public int status { get; set; }
+        public int? Status { get; set; }
 
         public virtual Reviews Reviews { get; set; }
 
