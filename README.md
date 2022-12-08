@@ -1,4 +1,4 @@
-# CRUD Docker Compose with SQL Server (Linux Image)
+# CRUD Movies API with Docker Compose and SQL Server (Linux Image)
 
 ## Getting Started
 
